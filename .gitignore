@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
 .static/
+Pipfile.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
