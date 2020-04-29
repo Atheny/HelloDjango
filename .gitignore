@@ -2,6 +2,8 @@
 ### Python template
 .static/
 Pipfile.lock
+fabfile.py
+_credentials.py
 
 
 # Byte-compiled / optimized / DLL files
@@ -137,3 +139,4 @@ dmypy.json
 
 !/fabfile.py
 !/Pipfile.lock
+!/_credentials.py
