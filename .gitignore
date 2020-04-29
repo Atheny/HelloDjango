@@ -3,6 +3,7 @@
 .static/
 Pipfile.lock
 
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -134,3 +135,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+!/fabfile.py
+!/Pipfile.lock
