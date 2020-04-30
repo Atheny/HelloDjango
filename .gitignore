@@ -3,7 +3,6 @@
 .static/
 Pipfile.lock
 fabfile.py
-_credentials.py
 
 
 # Byte-compiled / optimized / DLL files
