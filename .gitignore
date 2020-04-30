@@ -137,6 +137,3 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-!/fabfile.py
-!/Pipfile.lock
-!/_credentials.py
