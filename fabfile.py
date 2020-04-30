@@ -1,13 +1,16 @@
 from fabric import Connection
 from invoke import Responder
-from _credentials import github_username, github_password
-
+import environ
 '''
 实际部署：
 在本地环境运行：
 pipenv run python fabfile.py
 '''
+# initialize env
+env = environ.Env()
 
+# reading .env file
+environ.Env.read_env()
 
 def _get_github_auth_responders():
     """
@@ -15,17 +18,17 @@ def _get_github_auth_responders():
     """
     username_responder = Responder(
         pattern="Username for 'https://github.com':",
-        response='{}\n'.format(github_username)
+        response='{}\n'.format(env('github_username'))
     )
     password_responder = Responder(
-        pattern="Password for 'https://{}@github.com':".format(github_username),
-        response='{}\n'.format(github_password)
+        pattern="Password for 'https://{}@github.com':".format(env('github_username')),
+        response='{}\n'.format(env('github_password'))
     )
     return [username_responder, password_responder]
 
 
 def deploy():
-    c = Connection('real host', user='real name', port='22', connect_kwargs={'password': 'rear password'})
+    c = Connection(env('fab_host'), user=env('fab_user'), port=env('fab_port'), connect_kwargs={'password': env('fab_password')})
 
     supervisor_conf_path = '~/etc/'
     supervisor_program_name = 'HelloDjango'
@@ -43,10 +46,16 @@ def deploy():
         responders = _get_github_auth_responders()
         c.run(cmd, watchers=responders)
 
-    # 安装依赖，迁移数据库，收集静态文件
+    # 安装依赖
     with c.cd(project_root_path):
         c.run('pipenv install --deploy --ignore-pipfile')
-        c.run('pipenv run python manage.py migrate')
+
+    # # 迁移数据库
+    # with c.cd(project_root_path):
+    #     c.run('pipenv run python manage.py migrate')
+
+    # 收集静态文件
+    with c.cd(project_root_path):
         c.run('pipenv run python manage.py collectstatic --noinput')
 
     # 重新启动应用
@@ -54,4 +63,6 @@ def deploy():
         cmd = 'supervisorctl start {}'.format(supervisor_program_name)
         c.run(cmd)
 
-deploy()
+
+if __name__ == '__main__':
+    deploy()
