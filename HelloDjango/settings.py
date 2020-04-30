@@ -11,15 +11,32 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
+
+
+# initialize env
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+# reading .env file
+environ.Env.read_env()
+
+
+# False if not in os.environ
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env('DEBUG')
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-
+# Raises django's ImproperlyConfigured exception if SECRET_KEY not in os.environ
+SECRET_KEY = env('HELLO_DJANGO_SECRET_KEY')
 
 # Application definition
 
@@ -76,6 +93,24 @@ WSGI_APPLICATION = 'HelloDjango.wsgi.application'
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': env('HelloDjango_DATABASE'),
+        'USER': env('MYSQL_USER'),
+        'PASSWORD': env('MYSQL_PASSWORD'),
+        'Host': env('MYSQL_HOST'),
+        'PORT': '3306',
+        'OPTIONS':
+            {
+                'init_command': 'SET sql_mode="STRICT_TRANS_TABLES",default_storage_engine=INNODB;',  # 设置数据库为INNODB，为第三方数据库登录用
+                "unix_socket": "/tmp/mysql.sock",
+            },
+    }
+}
+
+
 
 
 

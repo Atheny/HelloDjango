@@ -20,6 +20,7 @@ get = "*"
 post = "*"
 request = "*"
 pymysql = "*"
+django-environ = "*"
 
 [requires]
 python_version = "3.7"
