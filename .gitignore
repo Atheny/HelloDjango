@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
-.static/
+
+/static/admin/
 Pipfile.lock
 fabfile.py
 
@@ -135,4 +136,5 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
 
