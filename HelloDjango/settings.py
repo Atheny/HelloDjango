@@ -26,7 +26,7 @@ env = environ.Env(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.atheny.xyz']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '49.232.69.25/',  '.atheny.xyz']
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
