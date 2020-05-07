@@ -9,8 +9,8 @@ services:
     build:
       context: .
       dockerfile: compose/production/django/Dockerfile
-    image: HelloDjango
-    container_name: HelloDjango
+    image: hellodjango
+    container_name: hellodjango
     working_dir: /app
     volumes:
       - database:/app/database
@@ -25,8 +25,8 @@ services:
     build:
       context: .
       dockerfile: compose/production/nginx/Dockerfile
-    image: HelloDjango_nginx
-    container_name: HelloDjango_nginx
+    image: hellodjango_nginx
+    container_name: hellodjango_nginx
     volumes:
       - static:/apps/HelloDjango/static
     ports:
