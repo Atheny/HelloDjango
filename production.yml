@@ -5,12 +5,12 @@ volumes:
   database:
 
 services:
-  HelloDjango:
+  hellodjango:
     build:
       context: .
       dockerfile: compose/production/django/Dockerfile
-    image: HelloDjango
-    container_name: HelloDjango
+    image: hellodjango
+    container_name: hellodjango
     working_dir: /app
     volumes:
       - database:/app/database
