@@ -9,10 +9,10 @@ RUN apk update \
 WORKDIR /app
 
 #RUN pip install pipenv -i https://pypi.douban.com/simple
-RUN pip install pipenv -i https://mirrors.cloud.tencent.com/pypi/simple/
+RUN pip3 install pipenv -i https://mirrors.cloud.tencent.com/pypi/simple/
 
 COPY Pipfile /app/Pipfile
-#COPY Pipfile.lock /app/Pipfile.lock
+COPY Pipfile.lock /app/Pipfile.lock
 RUN pipenv install --system --deploy --ignore-pipfile
 
 COPY . /app
