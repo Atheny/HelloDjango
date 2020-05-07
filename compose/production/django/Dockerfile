@@ -12,8 +12,8 @@ WORKDIR /app
 RUN pip install pipenv -i https://mirrors.cloud.tencent.com/pypi/simple/
 
 COPY Pipfile /app/Pipfile
-
-RUN pipenv install --system --deploy --ignore-pipfile
+COPY Pipfile.lock /app/Pipfile.lock
+RUN run pipenv install --system --deploy --ignore-pipfile
 
 COPY . /app
 
