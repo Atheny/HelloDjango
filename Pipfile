@@ -20,6 +20,7 @@ post = "*"
 request = "*"
 django-environ = "*"
 mysqlclient = "*"
+markupsafe = "==1.1.1"
 
 [requires]
 python_version = "3.7"
