@@ -21,6 +21,7 @@ request = "*"
 django-environ = "*"
 markupsafe = "==1.1.1"
 pymysql = "*"
+mysqlclient = "*"
 
 [requires]
 python_version = "3.6"
