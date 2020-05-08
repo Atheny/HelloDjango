@@ -106,11 +106,11 @@ DATABASES = {
         'PASSWORD': env('MYSQL_PASSWORD'),
         'Host': env('MYSQL_HOST'),
         'PORT': '3306',
-        'OPTIONS':
-            {
-                'init_command': 'SET sql_mode="STRICT_TRANS_TABLES",default_storage_engine=INNODB;',  # 设置数据库为INNODB，为第三方数据库登录用
-                "unix_socket": "/tmp/mysql.sock",
-            },
+        # 'OPTIONS':
+        #     {
+        #         'init_command': 'SET sql_mode="traditional",default_storage_engine=INNODB;',  # 设置数据库为INNODB，为第三方数据库登录用
+        #         "unix_socket": "/tmp/mysql.sock",
+        #     },
     }
 }
 

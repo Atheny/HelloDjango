@@ -19,8 +19,8 @@ get = "*"
 post = "*"
 request = "*"
 django-environ = "*"
-mysqlclient = "*"
 markupsafe = "==1.1.1"
+pymysql = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.6"
