@@ -104,7 +104,7 @@ DATABASES = {
         'NAME': env('HelloDjango_DATABASE'),
         'USER': env('MYSQL_USER'),
         'PASSWORD': env('MYSQL_PASSWORD'),
-        'Host': env('MYSQL_HOST'),
+        'HOST': env('MYSQL_HOST'),
         'PORT': '3306',
         # 'OPTIONS':
         #     {
