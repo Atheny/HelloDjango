@@ -52,6 +52,9 @@ class Post(models.Model):
     # User 是 django 为我们已经写好的用户模型。
     author = models.ForeignKey(User, verbose_name='作者', on_delete=models.CASCADE)
 
+    # 新增统计阅读量字段
+    view = models.PositiveIntegerField(default=0, editable=False)
+
     def save(self, *args, **kwargs):
         self.modified_time = timezone.now()
         md = markdown.Markdown(extensions=[
@@ -72,3 +75,8 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'pk': self.pk})
+
+
+    def increase_views(self):
+        self.view += 1
+        self.save(update_fields=['view'])
