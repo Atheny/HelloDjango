@@ -32,17 +32,36 @@
         <a href="#">下一页</a>
     </div>
     -->
-    <div class="pagination">
-        <ul>
-            <li><a href="">1</a></li>
-            <li><a href="">...</a></li>
-            <li><a href="">4</a></li>
-            <li><a href="">5</a></li>
-            <li class="current"><a href="">6</a></li>
-            <li><a href="">7</a></li>
-            <li><a href="">8</a></li>
-            <li><a href="">...</a></li>
-            <li><a href="">11</a></li>
-        </ul>
-    </div>
+    {% if is_paginated %}
+        <div class="pagination-simple" align="right">
+            <!-- 显示首页 -->
+            <a href="?page=1">首页&nbsp;&nbsp;</a>
+            <!-- 如果当前页还有上一页，显示一个上一页的按钮 -->
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">上一页</a>
+            {% endif %}
+            <!-- 显示当前页面信息 -->
+            <span class="current">第 <font color="red">{{ page_obj.number }} </font>页 / 共 {{ paginator.num_pages }} 页</span>
+            <!-- 如果当前页还有下一页，显示一个下一页的按钮 -->
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">下一页</a>
+            {% endif %}
+            <!-- 显示最后一页 -->
+            <a href="?page={{ paginator.num_pages }}">&nbsp;&nbsp;最后一页</a>
+        </div>
+    {% endif %}
+
+{#    <div lass="pagination">#}
+{#        <ul>#}
+{#            <li><a href="">1</a></li>#}
+{#            <li><a href="">...</a></li>#}
+{#            <li><a href="">4</a></li>#}
+{#            <li><a href="">5</a></li>#}
+{#            <li class="current"><a href="">6</a></li>#}
+{#            <li><a href="">7</a></li>#}
+{#            <li><a href="">8</a></li>#}
+{#            <li><a href="">...</a></li>#}
+{#            <li><a href="">11</a></li>#}
+{#        </ul>#}
+{#    </div>c#}
 {% endblock main %}
