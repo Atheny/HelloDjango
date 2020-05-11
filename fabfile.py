@@ -50,9 +50,9 @@ def deploy():
     with c.cd(project_root_path):
         c.run('pipenv install --deploy --ignore-pipfile')
 
-    # # 迁移数据库
-    # with c.cd(project_root_path):
-    #     c.run('pipenv run python manage.py makemigrations')
+    # 迁移数据库
+    with c.cd(project_root_path):
+        c.run('pipenv run python manage.py makemigrations')
 
     # 迁移数据库
     with c.cd(project_root_path):
