@@ -9,9 +9,10 @@ import markdown
 from markdown.extensions.toc import TocExtension
 import re
 from django.views.generic import ListView, DetailView
+from pure_pagination.mixins import PaginationMixin
 
 # 类视图(博客首页)
-class IndexView(ListView):
+class IndexView(PaginationMixin, ListView):
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'post_list'

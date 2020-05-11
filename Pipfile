@@ -23,6 +23,7 @@ markupsafe = "==1.1.1"
 pymysql = "*"
 mysqlclient = "*"
 faker = "*"
+django-pure-pagination = "*"
 
 [requires]
 python_version = "3.6"
