@@ -1,5 +1,6 @@
 from django import template
 from ..forms import CommentForm
+from pure_pagination import Paginator, PageNotAnInteger, EmptyPage
 
 register = template.Library()
 
@@ -18,6 +19,18 @@ def show_comments(context, post):
     # 等价于 Comment.objects.filter(post=post).order_by('-created_time')
     comment_list = post.comment_set.all()
     comment_cont = comment_list.count()
+
+    p = Paginator(comment_list, 10)
+
+    try:
+        page = context['request'].GET.get('page', 1)
+    except PageNotAnInteger:
+        page = 1
+    except EmptyPage:
+        page = p.num_pages
+
+    comment_list = p.page(page)
+
     return {
         'comment_list': comment_list,
         'comment_cont': comment_cont,
