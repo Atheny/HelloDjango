@@ -1,6 +1,7 @@
 # 存放自定义的模板标签代码
 from django import template
 from ..models import Post, Category, Tag, User
+from django.db.models.aggregates import Count
 
 register = template.Library()
 
@@ -18,12 +19,14 @@ def show_archives(context):
 
 @register.inclusion_tag('blog/inclusions/_categories.html', takes_context=True)
 def show_categories(context):
+    category_list = Category.objects.annotate(num_posts=Count('post')).filter(num_posts__gt=0)
     return {
-        'category_list': Category.objects.all(),
+        'category_list': category_list,
     }
 
 @register.inclusion_tag('blog/inclusions/_tags.html', takes_context=True)
 def show_tags(context):
+    tag_list = Tag.objects.annotate(num_posts=Count('post')).filter(num_posts__gt=0)
     return {
-        'tag_list': Tag.objects.all(),
+        'tag_list': tag_list,
     }
