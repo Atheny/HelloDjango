@@ -2,8 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
-import markdown
 from django.utils.html import strip_tags
+import markdown
+from markdown.extensions.toc import TocExtension
+from django.utils.text import slugify
+import re
+from django.utils.functional import cached_property
 
 # Create your models here.
 
@@ -80,3 +84,33 @@ class Post(models.Model):
     def increase_views(self):
         self.view += 1
         self.save(update_fields=['view'])
+
+    @cached_property
+    def rich_content(self):
+        return generate_rich_content(self.body)
+
+    @property
+    def toc(self):
+        return self.rich_content.get("toc", "")
+
+    @property
+    def body_html(self):
+        return self.rich_content.get("content", "")
+
+
+
+
+
+
+def generate_rich_content(value):
+    md = markdown.Markdown(
+        extensions=[
+            'markdown.extensions.extra',
+            'markdown.extensions.codehilite',
+            TocExtension(slugify=slugify),
+        ]
+    )
+    content = md.convert(value)
+    m = re.search(r'<div class="toc">\s*<ul>(.*)</ul>\s*</div>', md.toc, re.S)
+    toc = m.group(1) if m is not None else ''
+    return {"content": content, "toc": toc}

@@ -15,25 +15,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from blog.feeds import AllPostsRssFeed
 
-import os
 from django.views.generic.base import RedirectView
-
-
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),
     path('', include('comments.urls')),
-    # path(r'favicon.ico', RedirectView.as_view(url=r'/static/favicon.ico')),
+    path('all/rss/', AllPostsRssFeed(), name='rss'),
+
+    # 添加favicon.ico图标
+    path('favicon.ico', RedirectView.as_view(url=r'/static/favicon.ico')),
 ]
 
 
-
-#
-# from django.conf import settings
-# from django.conf.urls.static import static
-# if settings.DEBUG:
-#     media_root = os.path.join(settings.BASE_DIR, '')
-#     urlpatterns += static('/media2/', document_root=media_root)
