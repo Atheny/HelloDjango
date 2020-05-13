@@ -12,7 +12,7 @@
         暂无评论！
     {% endfor %}
 
-    <div id="pagination">
+    {% if is_paginated %}
         {{ comment_list.render }}
-    </div>
+    {% endif %}
 </ul>

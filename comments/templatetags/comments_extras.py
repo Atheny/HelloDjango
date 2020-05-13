@@ -30,8 +30,10 @@ def show_comments(context, post):
         page = p.num_pages
 
     comment_list = p.page(page)
+    page_len = p.num_pages
 
     return {
         'comment_list': comment_list,
         'comment_cont': comment_cont,
+        'is_paginated': None if page_len <= 1 else True,
     }

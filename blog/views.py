@@ -1,15 +1,12 @@
-from django.shortcuts import render
-
 # Create your views here.
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
-from django.utils.text import slugify
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Category, Tag, User
-import markdown
-from markdown.extensions.toc import TocExtension
-import re
 from django.views.generic import ListView, DetailView
 from pure_pagination.mixins import PaginationMixin
+from django.contrib import messages
+from django.db.models import Q
+from pure_pagination import Paginator, PageNotAnInteger, EmptyPage
 
 # 类视图(博客首页)
 class IndexView(PaginationMixin, ListView):
@@ -74,3 +71,29 @@ class PostDetailView(DetailView):
         # 覆写 get_object 方法的目的是因为需要对 post 的 body 值进行渲染
         post = super(PostDetailView, self).get_object(queryset=None)
         return post
+
+
+def search(request):
+    q = request.GET.get('q')
+
+    if not q:
+        error_msg = "请输入搜索关键词"
+        messages.add_message(request, messages.ERROR, error_msg, extra_tags='danger')
+        return redirect('blog:index')
+
+    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q))
+
+    # 增加翻页功能
+    p = Paginator(post_list, 10)
+    try:
+        page = request.GET.get('page', 1)
+    except PageNotAnInteger:
+        page = 1
+    except EmptyPage:
+        page = p.num_pages
+
+    post_list = p.page(page)
+    page_len = p.num_pages
+    return render(request, 'blog/search_index.html', context={
+        'post_list': post_list.object_list, 'page_obj': post_list, 'q': q, 'is_paginated': None if page_len <= 1 else True,
+    })
