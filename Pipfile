@@ -24,6 +24,9 @@ pymysql = "*"
 mysqlclient = "*"
 faker = "*"
 django-pure-pagination = "*"
+django-haystack = "*"
+elasticsearch = ">=2,<3"
+six = "*"
 
 [requires]
 python_version = "3.6"
