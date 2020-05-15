@@ -25,6 +25,7 @@ urlpatterns = [
     path('', include('blog.urls')),
     path('', include('comments.urls')),
     path('all/rss/', AllPostsRssFeed(), name='rss'),
+    path('search/', include('haystack.urls')),
 
     # 添加favicon.ico图标
     path('favicon.ico', RedirectView.as_view(url=r'/static/favicon.ico')),

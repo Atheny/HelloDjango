@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pure_pagination',
+    'haystack',
     'blog.apps.BlogConfig',
     'comments.apps.CommentsConfig',
 
@@ -170,3 +171,23 @@ PAGINATION_SETTINGS = {
     'MARGIN_PAGES_DISPLAYED': 2,
     'SHOW_FIRST_PAGE_WHEN_INVALID': True,   # 当请求了不存在页，显示第一页
 }
+
+
+# 搜索设置
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        # 'ENGINE': 'haystack.backends.elasticsearch2_backend.Elasticsearch2SearchEngine',
+        'ENGINE': 'blog.elasticsearch2_ik_backend.Elasticsearch2IkSearchEngine',
+        'URL': env('HAYSTACK_CONNECTIONS_URL'),
+        'INDEX_NAME': 'hellodjango',
+    }
+}
+
+# 指定如何对搜索结果分页，这里设置为每 10 项结果为一页
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 10
+
+# 指定什么时候更新索引, 这里设置为实时更新
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+# 指定让haystack 在高亮文本时，使用我们自定义的辅助类
+HAYSTACK_CUSTOM_HIGHLIGHTER = 'blog.utils.Highlighter'

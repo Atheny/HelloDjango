@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 app_name = 'blog'
@@ -9,5 +9,5 @@ urlpatterns = [
     path('category/<int:pk>/', views.CategoryView.as_view(), name='category'),
     path('tag/<int:pk>/', views.TagView.as_view(), name='tag'),
     path('author/<int:pk>/', views.AuthorView.as_view(), name='author'),
-    path('search/', views.search, name='search'),
+    # path('search/', views.search, name='search'),
 ]
