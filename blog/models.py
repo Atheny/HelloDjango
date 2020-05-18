@@ -77,10 +77,11 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    # 返回文章详情视图对应的url
     def get_absolute_url(self):
         return reverse('blog:detail', kwargs={'pk': self.pk})
 
-
+    # 将views字段的值+1
     def increase_views(self):
         self.view += 1
         self.save(update_fields=['view'])

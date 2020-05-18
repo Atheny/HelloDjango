@@ -1,6 +1,6 @@
 from django import template
 from ..forms import CommentForm
-from pure_pagination import Paginator, PageNotAnInteger, EmptyPage
+from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 register = template.Library()
 
@@ -24,10 +24,13 @@ def show_comments(context, post):
 
     try:
         page = context['request'].GET.get('page', 1)
+        p.page(page)
     except PageNotAnInteger:
         page = 1
     except EmptyPage:
         page = p.num_pages
+    except KeyError:
+        page = 1
 
     comment_list = p.page(page)
     page_len = p.num_pages
