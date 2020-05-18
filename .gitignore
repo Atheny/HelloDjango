@@ -4,6 +4,11 @@
 /static/admin/
 Pipfile.lock
 fabfile.py
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
 
 
 # Byte-compiled / optimized / DLL files
