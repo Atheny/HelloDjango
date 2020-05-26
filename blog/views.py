@@ -17,7 +17,6 @@ class IndexView(PaginationMixin, ListView):
     paginate_by = 10
 
 
-
 # 博客按时间显示类视图(直接复用了index.html模板)
 class ArchiveView(IndexView):
     def get_queryset(self):
