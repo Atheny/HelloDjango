@@ -1,6 +1,6 @@
 [[source]]
 name = "pypi"
-url = "https://mirrors.cloud.tencent.com/pypi/simple/"
+url = "https://mirrors.aliyun.com/pypi/simple/"
 verify_ssl = true
 
 [dev-packages]
@@ -28,6 +28,8 @@ django-pure-pagination = "*"
 django-haystack = "*"
 elasticsearch = ">=2,<3"
 six = "*"
+djangorestframework = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.6"
