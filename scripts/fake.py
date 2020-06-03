@@ -37,7 +37,7 @@ if __name__ == '__main__':
     Comment.objects.all().delete()
     User.objects.all().delete()
 
-    print('create a blog user')
+    print('create a blog users')
     user = User.objects.create_superuser('admin', '1234567@163.com', 'asdf1234')
     category_list = ['Python学习笔记', '开源项目', '工具资源', '程序员生活感悟', 'test category']
     tag_list = ['django', 'Python', 'Pipenv', 'Docker', 'Nginx', 'Elasticsearch', 'Gunicorn', 'Supervisor', 'test tag']

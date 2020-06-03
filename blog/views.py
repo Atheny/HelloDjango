@@ -96,3 +96,58 @@ def search(request):
     return render(request, 'blog/search_index.html', context={
         'post_list': post_list.object_list, 'page_obj': post_list, 'q': q, 'is_paginated': None if page_len <= 1 else True,
     })
+
+
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+from rest_framework.permissions import AllowAny
+
+from rest_framework import viewsets
+from rest_framework import mixins
+
+from .serializers import PostListSerializer, PostRetrieveSerializer
+
+
+'''
+实现index API视图函数
+'''
+@api_view(http_method_names=['GET'])
+def index(request):
+    post_list = Post.objects.all().order_by('-created_time')
+    serializer = PostListSerializer(post_list, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+'''
+用类视图实现首页API
+'''
+class IndexPostListAPIView(ListAPIView):
+    serializer_class = PostListSerializer
+    queryset = Post.objects.all().order_by('-created_time')
+    pagination_class = PageNumberPagination
+    permission_classes = [AllowAny]
+
+'''
+使用视图集
+'''
+class PostViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    serializer_class = PostListSerializer
+    queryset = Post.objects.all().order_by('-created_time')
+    pagination_class = PageNumberPagination
+    # pagination_class = LimitOffsetPagination
+    permission_classes = [AllowAny]
+    lookup_field = 'pk'
+
+    serializer_class_table = {
+        'list': PostListSerializer,
+        'retrieve': PostRetrieveSerializer,
+    }
+
+
+    def get_serializer_class(self):
+        return self.serializer_class_table.get(self.action, super().get_serializer_class())

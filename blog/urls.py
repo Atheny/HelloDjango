@@ -10,4 +10,7 @@ urlpatterns = [
     path('tag/<int:pk>/', views.TagView.as_view(), name='tag'),
     path('author/<int:pk>/', views.AuthorView.as_view(), name='author'),
     # path('search/', views.search, name='search'),
+    # path('api/index/', views.index),
+    # path('api/index/', views.IndexPostListAPIView.as_view()),
+    # path('api/index/', views.PostViewSet.as_view({'get': 'list'})),   # 可省略
 ]
