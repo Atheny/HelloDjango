@@ -46,6 +46,10 @@ def deploy():
         responders = _get_github_auth_responders()
         c.run(cmd, watchers=responders)
 
+    # 删除原有的Pipfile.lock
+    with c.cd(project_root_path):
+        c.run('rm Pipfile.lock')
+
     # 安装依赖
     with c.cd(project_root_path):
         c.run('pipenv install --deploy --ignore-pipfile')

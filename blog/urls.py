@@ -13,4 +13,10 @@ urlpatterns = [
     # path('api/index/', views.index),
     # path('api/index/', views.IndexPostListAPIView.as_view()),
     # path('api/index/', views.PostViewSet.as_view({'get': 'list'})),   # 可省略
+
+    # path('api/tag/<int:tags>/', views.tag_post_list),
+    # path('api/category/<int:category>/', views.category_post_list),
+    # path('api/author/<int:author>/', views.author_post_list),
+
+
 ]

@@ -46,15 +46,15 @@ class Post(models.Model):
     excerpt = models.CharField('摘要', max_length=200, blank=True)
 
     # 一对多关联  # 使用 models.CASCADE 参数，意为级联删除
-    category = models.ForeignKey(Category, verbose_name='分类', on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name='post', verbose_name='分类', on_delete=models.CASCADE)
 
     # 多对多关联  # 文章可以没有标签，因此为标签 tags 指定了 blank=True
-    tags = models.ManyToManyField(Tag, verbose_name='标签', blank=True)
+    tags = models.ManyToManyField(Tag, related_name='post', verbose_name='标签', blank=True)
 
     # 文章作者.  这里 User 是从 django.contrib.auth.models 导入的。
     # django.contrib.auth 是 django 内置的应用，专门用于处理网站用户的注册、登录等流程，
     # User 是 django 为我们已经写好的用户模型。
-    author = models.ForeignKey(User, verbose_name='作者', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='posts', verbose_name='作者', on_delete=models.CASCADE)
 
     # 新增统计阅读量字段
     view = models.PositiveIntegerField(default=0, editable=False)

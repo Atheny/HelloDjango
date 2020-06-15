@@ -19,10 +19,14 @@ from blog.feeds import AllPostsRssFeed
 
 from django.views.generic.base import RedirectView
 from rest_framework import routers
-from blog.views import PostViewSet
+from blog.views import PostViewSet, CategoryViewSet, TagViewSet, AuthorViewSet
 
 router = routers.DefaultRouter()
 router.register(r'posts', PostViewSet, basename='post')
+router.register(r'categorys', CategoryViewSet, basename='category')
+router.register(r'tags', TagViewSet, basename='tag')
+router.register(r'authors', AuthorViewSet, basename='user')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

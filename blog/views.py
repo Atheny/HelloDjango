@@ -104,13 +104,26 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from rest_framework.generics import ListAPIView
-from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
+from .pagination import BlogPageNumberPagination
 
 from rest_framework import viewsets
 from rest_framework import mixins
+from rest_framework import views
 
 from .serializers import PostListSerializer, PostRetrieveSerializer
+from .serializers import CategorySerializer, TagSerializer, UserSerializer
+from .serializers import CategoryPostRetrieveSerializer, UserPostRetrieveSerializer
+
+from collections import OrderedDict
+from rest_framework.serializers import DateField
+from rest_framework.decorators import action
+
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import PostFilter
+
+
 
 
 '''
@@ -134,20 +147,127 @@ class IndexPostListAPIView(ListAPIView):
 
 '''
 使用视图集
+实现首页和详情页查看
 '''
 class PostViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = PostListSerializer
     queryset = Post.objects.all().order_by('-created_time')
     pagination_class = PageNumberPagination
-    # pagination_class = LimitOffsetPagination
     permission_classes = [AllowAny]
     lookup_field = 'pk'
+
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = PostFilter
 
     serializer_class_table = {
         'list': PostListSerializer,
         'retrieve': PostRetrieveSerializer,
     }
 
-
     def get_serializer_class(self):
         return self.serializer_class_table.get(self.action, super().get_serializer_class())
+
+
+    @action(methods=['GET'], detail=False, url_path='archive/dates', url_name='archive-date')
+    def list_archive_dates(self, request, *args, **kwargs):
+        dates = Post.objects.dates('created_time', 'month', order='DESC')
+        date_field = DateField()
+        data = [date_field.to_representation(date) for date in dates]
+        return Response(data=data, status=status.HTTP_200_OK)
+
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################
+'''
+按分类查看
+'''
+@api_view(http_method_names=['GET'])
+def category_post_list(request, category):
+    # 获取所有按标签分类的post数据
+    post_list = Post.objects.filter(category=category).order_by('-created_time')
+    # 实例化分页类
+    pg = BlogPageNumberPagination()
+    page = pg.paginate_queryset(queryset=post_list, request=request, view=mixins.ListModelMixin)
+    serializer = PostListSerializer(instance=page, many=True, context={'request': request})
+
+    return Response(OrderedDict([
+        ('count', len(post_list)),
+        ('next', pg.get_next_link()),
+        ('previous', pg.get_previous_link()),
+        ('results', serializer.data)
+    ]), status=status.HTTP_200_OK)
+
+
+class CategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all().order_by('-pk')
+    pagination_class = PageNumberPagination
+    permission_classes = [AllowAny]
+    lookup_field = 'pk'
+
+
+
+'''
+按标签查看
+'''
+
+@api_view(http_method_names=['GET'])
+def tag_post_list(request, tags):
+    # 获取所有按标签分类的post数据
+    post_list = Post.objects.filter(tags=tags).order_by('-created_time')
+    # 实例化分页类
+    pg = BlogPageNumberPagination()
+
+    # 调用paginate_queryset方法对数据进行分页处理，参数有三个：
+    # 1. queryset是我们从数据库中取出的所有数据
+    # 2.request=request
+    # 3.view是处理分页的视图
+    page = pg.paginate_queryset(queryset=post_list, request=request, view=mixins.ListModelMixin)
+    serializer = PostListSerializer(instance=page, many=True, context={'request': request})
+
+    # return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(OrderedDict([
+        ('count', len(post_list)),
+        ('next', pg.get_next_link()),
+        ('previous', pg.get_previous_link()),
+        ('results', serializer.data)
+    ]), status=status.HTTP_200_OK)
+
+
+class TagViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all().order_by('-pk')
+    pagination_class = PageNumberPagination
+    permission_classes = [AllowAny]
+    lookup_field = 'pk'
+
+
+
+'''
+按作者查看
+'''
+@api_view(http_method_names=['GET'])
+def author_post_list(request, author):
+    post_list = Post.objects.filter(author=author).order_by('-created_time')
+    pg = BlogPageNumberPagination()
+    page = pg.paginate_queryset(queryset=post_list, request=request, view=mixins.ListModelMixin)
+    serializer = PostListSerializer(instance=page, many=True, context={'request': request})
+    return Response(OrderedDict([
+        ('count', len(post_list)),
+        ('next', pg.get_next_link()),
+        ('previous', pg.get_previous_link()),
+        ('results', serializer.data)
+    ]), status=status.HTTP_200_OK)
+
+
+class AuthorViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all().order_by('-pk')
+    pagination_class = PageNumberPagination
+    permission_classes = [AllowAny]
+    lookup_field = 'pk'
+
+########################################################################################################################
+########################################################################################################################
+########################################################################################################################

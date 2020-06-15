@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'blog.apps.BlogConfig',
     'comments.apps.CommentsConfig',
     'rest_framework',
+    'django_filters',
     'polls.apps.PollsConfig',  # 安装第三方包之后导入
 
 
