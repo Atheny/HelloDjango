@@ -76,30 +76,3 @@ class PostRetrieveSerializer(serializers.HyperlinkedModelSerializer):
             'toc',
             'body_html',
         ]
-
-
-class CategoryPostRetrieveSerializer(serializers.ModelSerializer):
-    post = PostListSerializer(many=True)
-
-    class Meta:
-        model = Category
-        fields = [
-            'id',
-            'url',
-            'name',
-            'post',
-        ]
-
-
-class UserPostRetrieveSerializer(serializers.HyperlinkedModelSerializer):
-    posts = PostListSerializer(many=True)
-
-    class Meta:
-        model = User
-        fields = [
-            'id',
-            'url',
-            'username',
-            'posts',
-        ]
-

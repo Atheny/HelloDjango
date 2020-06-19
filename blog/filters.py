@@ -8,4 +8,4 @@ class PostFilter(drf_filters.FilterSet):
 
     class Meta:
         model = Post
-        fields = ['tags', 'category', 'created_year', 'created_month']
+        fields = ['category', 'tags', 'created_year', 'created_month']

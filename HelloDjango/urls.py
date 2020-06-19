@@ -20,12 +20,14 @@ from blog.feeds import AllPostsRssFeed
 from django.views.generic.base import RedirectView
 from rest_framework import routers
 from blog.views import PostViewSet, CategoryViewSet, TagViewSet, AuthorViewSet
+from comments.views import CommentViewSet
 
 router = routers.DefaultRouter()
 router.register(r'posts', PostViewSet, basename='post')
 router.register(r'categorys', CategoryViewSet, basename='category')
 router.register(r'tags', TagViewSet, basename='tag')
 router.register(r'authors', AuthorViewSet, basename='user')
+router.register(r'comments', CommentViewSet, basename='comment')
 
 
 urlpatterns = [

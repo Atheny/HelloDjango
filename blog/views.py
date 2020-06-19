@@ -104,7 +104,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from rest_framework.generics import ListAPIView
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.permissions import AllowAny
 from .pagination import BlogPageNumberPagination
 
@@ -114,7 +114,7 @@ from rest_framework import views
 
 from .serializers import PostListSerializer, PostRetrieveSerializer
 from .serializers import CategorySerializer, TagSerializer, UserSerializer
-from .serializers import CategoryPostRetrieveSerializer, UserPostRetrieveSerializer
+from comments.serializers import CommentSerializer
 
 from collections import OrderedDict
 from rest_framework.serializers import DateField
@@ -174,6 +174,22 @@ class PostViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.Gen
         date_field = DateField()
         data = [date_field.to_representation(date) for date in dates]
         return Response(data=data, status=status.HTTP_200_OK)
+
+
+    @action(methods=['GET'], detail=True, url_path='comments', url_name='comment', pagination_class=LimitOffsetPagination, serializer_class=CommentSerializer)
+    def list_comments(self, request, *args, **kwargs):
+        # 根据 URL 传入的参数值（文章 id）获取到博客文章记录
+        post = self.get_object()
+        # 获取文章下关联的全部评论
+        queryset = post.comment_set.all().order_by('-created_time')
+        # 对评论列表进行分页，根据 URL 传入的参数获取指定页的评论
+        page = self.paginate_queryset(queryset)
+        # 序列化评论
+        serializer = self.get_serializer(page, many=True)
+        # 返回分页后的评论列表
+        return self.get_paginated_response(serializer.data)
+
+
 
 
 ########################################################################################################################
